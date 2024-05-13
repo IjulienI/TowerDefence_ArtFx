@@ -37,6 +37,7 @@ void Game::LoadTiles()
 	Texture2D grass = LoadTexture("textures/grass.png");
 	Texture2D finish = LoadTexture("textures/finish.png");
 	Texture2D obstacle = LoadTexture("textures/obstacle.png");
+
 	Image mapImage = LoadImage("textures/base.png");
 
 	std::string path = "textures/maps";
@@ -68,17 +69,12 @@ void Game::LoadTiles()
 			}
 			else if (pixels[j * mapImage.width + i].r == 255 && pixels[j * mapImage.width + i].g == 0 && pixels[j * mapImage.width + i].b == 0) {
 				map[i][j]->SetTexture(obstacle);
-				map[i][j]->SetType(OBSTACLE);
+				map[i][j]->SetType(CASTLE);
 				obstacles.push_back(map[i][j]);
 			}
 			else if (pixels[j * mapImage.width + i].r == 255 && pixels[j * mapImage.width + i].g == 255 && pixels[j * mapImage.width + i].b == 255) {
 				map[i][j]->SetTexture(finish);
-				map[i][j]->SetType(FINISH);
-			}
-			else if (pixels[j * mapImage.width + i].r == 0 && pixels[j * mapImage.width + i].g == 0 && pixels[j * mapImage.width + i].b == 255) {
-				map[i][j]->SetTexture(road);
-				map[i][j]->SetType(CHECKPOINTS);
-				checkPoints.push_back(map[i][j]);
+				map[i][j]->SetType(TOWER);
 			}
 			pixelIndex++;
 		}

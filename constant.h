@@ -6,7 +6,7 @@
 //BASE
 
 const Vector2 WINDOW_SIZE = { 1080,720 };
-const int FRAME_LIMIT = 60;
+const int FRAME_LIMIT = 144;
 const Color BACKGROUND_COLORATION = BLACK;
 const int PIXELS_PER_METER = 5;
 

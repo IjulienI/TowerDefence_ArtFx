@@ -11,7 +11,7 @@ Application::~Application(){
 
 void Application::Init()
 {
-	InitWindow(WINDOW_SIZE.x, WINDOW_SIZE.y, "NoEngine");
+	InitWindow(WINDOW_SIZE.x, WINDOW_SIZE.y, "EUh JE SaIS pAs");
 	SetTargetFPS(FRAME_LIMIT);
 
 	sceneManager = new SceneManager();
@@ -21,7 +21,6 @@ void Application::Init()
 		Update();
 		Draw();
 	}
-
 	CloseWindow();
 }
 

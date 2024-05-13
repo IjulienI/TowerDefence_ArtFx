@@ -137,6 +137,7 @@
     <ClCompile Include="application.cpp" />
     <ClCompile Include="debug.cpp" />
     <ClCompile Include="game.cpp" />
+    <ClCompile Include="gameManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="levelSelection.cpp" />
@@ -149,11 +150,13 @@
     <ClInclude Include="constant.h" />
     <ClInclude Include="debug.h" />
     <ClInclude Include="game.h" />
+    <ClInclude Include="gameManager.h" />
     <ClInclude Include="menu.h" />
     <ClInclude Include="levelSelection.h" />
     <ClInclude Include="scene.h" />
     <ClInclude Include="sceneManager.h" />
     <ClInclude Include="tile.h" />
+    <ClInclude Include="tileType.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
