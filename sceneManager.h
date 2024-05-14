@@ -3,7 +3,7 @@
 #include "menu.h"
 #include "game.h"
 
-enum Scenes {
+enum class Scenes {
 	MENU,
 	GAME
 };

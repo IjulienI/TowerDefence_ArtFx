@@ -1,4 +1,7 @@
 #pragma once
+
+#include <iostream>
+
 class gameManager
 {
 private:
@@ -16,5 +19,8 @@ private:
 public:
 	gameManager();
 	~gameManager();
-};
 
+	void ApplyDamage(int amount);
+	void ApplyRegen(int amount);
+	void CastleDead();
+};

@@ -1,30 +1,34 @@
 #pragma once
+
 #include "constant.h"
 #include "tileType.h"
+#include "Vec2.h"
 #include <iostream>
 
 class Tile {
 public:
 	Tile();
-	Tile(Vector2 position, Texture2D& texture);
-	Tile(Vector2 position);
+	Tile(Vec2 position);
 	~Tile();
 
+
+	void Draw();	
+	
+	void SetPosition(Vec2 position);
 	void SetType(TileType type);
 	void SetTexture(Texture2D& texture);
-	void Draw();
 
-	Vector2 GetPosition();
-	Vector2 GetCenter();
+	Vec2 GetPosition();
+	Vec2 GetCenter();
 	TileType GetType();
 
 	bool GetActivated();
 	void SetActivated(bool status);
 private:
-	Vector2 position;
-	TileType type;
-	Texture2D texture;
+	Vec2 position = {0,0};
+	TileType type = TileType::GRASS;
+	Texture2D texture = LoadTexture("textures/base.png");
 
-	bool isActivated;
+	bool isActivated = false;
 };
 

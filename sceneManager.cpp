@@ -19,7 +19,7 @@ void SceneManager::Draw() {
 }
 
 void SceneManager::Init() {
-	ChangeScene(MENU);
+	ChangeScene(Scenes::MENU);
 }
 
 void SceneManager::ChangeScene(Scenes newScene) {
@@ -28,7 +28,7 @@ void SceneManager::ChangeScene(Scenes newScene) {
 	}
 	switch (newScene)
 	{
-	case MENU:
+	case Scenes::MENU:
 		currentScene = new Menu();
 		break;
 	}
