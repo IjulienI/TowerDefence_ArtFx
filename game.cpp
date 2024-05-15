@@ -89,7 +89,7 @@ void Game::Load()
 	UnloadImage(mapImage);
 	UnloadImageColors(pixels);
 
-	AlignPath(waypoints);
+	CleanPath(waypoints);
 
 	Enemy* test = new Enemy();
 	test->SetPath(waypoints);
@@ -97,40 +97,59 @@ void Game::Load()
 	enemies.push_back(test);
 }
 
-void Game::AlignPath(std::vector<Vec2>& waypoints) {
-	int maxLoop = waypoints.size() * waypoints.size();
+void Game::CleanPath(std::vector<Vec2>& waypoints) {
 	std::vector<Vec2> cleanPath;
 	cleanPath.push_back(waypoints[0]);
 	auto it = std::remove(waypoints.begin(), waypoints.end(), waypoints[0]);
 	waypoints.erase(it,waypoints.end());
 
+	int loopCount = 0;
+	float lastAngle = 0;
+
 	while (!waypoints.empty())
 	{
-		static int loopCount;
 		for (int i = 0; i < waypoints.size(); i++) {
 			Vec2 p1 = cleanPath.back();
 			Vec2 p2 = waypoints[i];
 			float distance = sqrt((p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y));
-			if (distance == TILE_SIZE) {
+			float angle = Angle(p1, p2);
+
+			//si la prochaine case est en face et a la bonne distance
+			if (distance == TILE_SIZE && angle == lastAngle) {
 				cleanPath.push_back(waypoints[i]);
 				auto it = std::remove(waypoints.begin(), waypoints.end(), waypoints[i]);
 				waypoints.erase(it, waypoints.end());
 				loopCount = 0;
 			}
-			if (loopCount == 1) {
-				if (distance == TILE_SIZE * 2) {
-					cleanPath.push_back(waypoints[i]);
-					auto it = std::remove(waypoints.begin(), waypoints.end(), waypoints[i]);
-					waypoints.erase(it, waypoints.end());
-					loopCount = 0;
-				}
+			//sinon est ce qu'elle est juste a la bonne distance
+			else if (loopCount == 2 && distance == TILE_SIZE) {
+				lastAngle = angle;
+				cleanPath.push_back(waypoints[i]);
+				auto it = std::remove(waypoints.begin(), waypoints.end(), waypoints[i]);
+				waypoints.erase(it, waypoints.end());
+				loopCount = 0;
+			}
+			//sinon est ce qu'elles est a une case et dans la bonne direction
+			else if (loopCount == 3 && distance == TILE_SIZE * 2 && angle == lastAngle) {
+				cleanPath.push_back(waypoints[i]);
+				auto it = std::remove(waypoints.begin(), waypoints.end(), waypoints[i]);
+				waypoints.erase(it, waypoints.end());
+				loopCount = 0;
 			}
 		}
 		loopCount++;
-		if (loopCount >= 2) {
+		if (loopCount >= 10) {
 			break;
 		}
-		std::cout << loopCount << std::endl;
 	}
 	waypoints = cleanPath;
+}
+
+float Game::Angle(const Vec2& a, const Vec2& b) {
+	float opposite = abs(a.x - b.x);
+	float adjacent = abs(a.y - b.y);
+
+	float angle = atan2(opposite, adjacent);
+
+	return angle;
 }

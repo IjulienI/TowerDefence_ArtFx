@@ -12,7 +12,7 @@ private:
 	Vec2 size = { 0,0 };
 	std::vector<Vec2> path;
 	float rotation = 0;
-	float speed = 50;
+	float speed = 150;
 
 	int health = 0;
 	int damage = 0;
