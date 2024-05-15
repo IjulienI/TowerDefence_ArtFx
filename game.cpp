@@ -70,7 +70,12 @@ void Game::Load()
 				map[i][j]->SetType(TileType::ROAD);
 				waypoints.push_back(map[i][j]->GetCenter());
 			}
-			else if (pixels[j * mapImage.width + i].r == 0 && pixels[j * mapImage.width + i].g == 255 && pixels[j * mapImage.width + i].b == 21) {
+			else if (pixels[j * mapImage.width + i].r == 255 && pixels[j * mapImage.width + i].g == 0 && pixels[j * mapImage.width + i].b == 255) {
+				map[i][j]->SetTexture(road);
+				map[i][j]->SetType(TileType::ROAD);
+				start = map[i][j]->GetCenter();
+			}
+			else if (pixels[j * mapImage.width + i].r == 0 && pixels[j * mapImage.width + i].g == 255 && pixels[j * mapImage.width + i].b == 0) {
 				map[i][j]->SetTexture(grass);
 				map[i][j]->SetType(TileType::GRASS);
 			}
@@ -99,9 +104,7 @@ void Game::Load()
 
 void Game::CleanPath(std::vector<Vec2>& waypoints) {
 	std::vector<Vec2> cleanPath;
-	cleanPath.push_back(waypoints[0]);
-	auto it = std::remove(waypoints.begin(), waypoints.end(), waypoints[0]);
-	waypoints.erase(it,waypoints.end());
+	cleanPath.push_back(start);
 
 	int loopCount = 0;
 	float lastAngle = 0;

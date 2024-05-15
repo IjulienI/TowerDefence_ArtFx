@@ -20,4 +20,3 @@ private:
 	int colonn;
 	std::vector<Texture2D> levelTextures;
 };
-

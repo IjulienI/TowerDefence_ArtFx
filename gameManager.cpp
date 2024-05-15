@@ -4,8 +4,7 @@ gameManager::gameManager(){
 	castleLife = castleMaxLife;
 }
 
-gameManager::~gameManager()
-{
+gameManager::~gameManager(){
 }
 
 void gameManager::ApplyDamage(int amount) {

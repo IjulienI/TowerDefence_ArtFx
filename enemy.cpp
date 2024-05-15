@@ -17,8 +17,8 @@ void Enemy::Update(float dt) {
 }
 
 void Enemy::Draw() {
-	//DrawTexturePro(texture,)
-	DrawCircle(position.x, position.y, 15, BLACK);
+	Rectangle enemy = { position.x,position.y,30,30 };
+	DrawTexturePro(texture, { 0,0,(float)texture.width,(float)texture.height }, enemy, { 15,15 }, rotation, WHITE);
 }
 
 void Enemy::SetPosition(Vec2 position) {
@@ -34,16 +34,26 @@ void Enemy::SetPath(std::vector<Vec2> path) {
 }
 
 void Enemy::MoveToward(Vec2 target, float dt) {
-	Vec2 direction = target - position;
+	Vec2 forward = target - position;
 
-	float distance = sqrt(direction.x * direction.x + direction.y * direction.y);
+	float distance = sqrt(forward.x * forward.x + forward.y * forward.y);
 	if (distance != 0) {
-		direction /= distance;
-		position += direction * speed * dt;
+		forward /= distance;
+		position += forward * speed * dt;
 	}
-	UpdateRotation(direction);
+	UpdateRotation(forward, dt);
 }
 
-void Enemy::UpdateRotation(Vec2 direction) {
-	rotation = atan2(direction.y, direction.x);
+void Enemy::UpdateRotation(Vec2 direction, float dt) {
+	float targetRotation = atan2(direction.y, direction.x) * (180/PI);
+
+	float difference = targetRotation - rotation;
+	if (difference > 180) difference -= 360;
+	else if (difference < -180) difference += 360;
+
+	if (difference > 0) {
+		rotation += rotationSpeed * dt; 	}
+	else if (difference < 0) {
+		rotation -= rotationSpeed * dt;
+	}
 }

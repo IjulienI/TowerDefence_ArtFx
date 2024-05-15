@@ -31,6 +31,9 @@ void SceneManager::ChangeScene(Scenes newScene) {
 	case Scenes::MENU:
 		currentScene = new Menu();
 		break;
+	case Scenes::MAP_SELECTION:
+		currentScene = new LevelSelection();
+		break;
 	}
 }
 

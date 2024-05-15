@@ -2,10 +2,12 @@
 #include "scene.h"
 #include "menu.h"
 #include "game.h"
+#include "levelSelection.h"
 
 enum class Scenes {
 	MENU,
-	GAME
+	GAME,
+	MAP_SELECTION
 };
 
 class SceneManager {

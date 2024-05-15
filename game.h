@@ -28,6 +28,8 @@ private:
 	std::vector<Vec2> waypoints;
 	std::vector<Enemy*> enemies;
 
+	Vec2 start;
+
 	void CleanPath(std::vector<Vec2>& waypoints);
 	float Angle(const Vec2& a, const Vec2& b);
 

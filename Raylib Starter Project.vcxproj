@@ -156,6 +156,7 @@
     <ClInclude Include="gameManager.h" />
     <ClInclude Include="menu.h" />
     <ClInclude Include="levelSelection.h" />
+    <ClInclude Include="random.h" />
     <ClInclude Include="scene.h" />
     <ClInclude Include="sceneManager.h" />
     <ClInclude Include="tile.h" />

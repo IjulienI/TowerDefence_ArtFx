@@ -15,6 +15,6 @@ void Menu::Update(float dt) {
 
 void Menu::Draw() {
 	if (GuiButton(menuButton, "MENU")) {
-		sceneManager->LoadMap(1);
+		sceneManager->ChangeScene(Scenes::MAP_SELECTION);
 	}
 }

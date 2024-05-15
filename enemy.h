@@ -4,6 +4,7 @@
 #include "Vec2.h"
 #include <vector>
 #include <math.h>
+#include "gameManager.h"
 
 class Enemy {
 private:
@@ -12,7 +13,8 @@ private:
 	Vec2 size = { 0,0 };
 	std::vector<Vec2> path;
 	float rotation = 0;
-	float speed = 150;
+	float rotationSpeed = 300;
+	float speed = 50;
 
 	int health = 0;
 	int damage = 0;
@@ -30,7 +32,7 @@ public:
 	void SetPath(std::vector<Vec2> path);
 
 	void MoveToward(Vec2 target, float dt);
-	void UpdateRotation(Vec2 direction);
+	void UpdateRotation(Vec2 direction, float dt);
 };
 
 //class SmallEnemy : public Enemy {
