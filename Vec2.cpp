@@ -70,6 +70,24 @@ float Vec2::Cross(const Vec2& v) const {
 	return (x * v.y) - (y * v.x);
 }
 
+float Vec2::Distance(const Vec2& v) const {
+	return sqrt((x - v.x) * (x - v.x) + (y - v.y) * (y - v.y));
+}
+
+float Vec2::Angle(const Vec2& v) const {
+	float opposite = abs(x - v.x);
+	float adjacent = abs(y - v.y);
+
+	return atan2(opposite, adjacent);
+}
+
+float Vec2::AngleDegre(const Vec2& v) const {
+	float opposite = abs(x - v.x);
+	float adjacent = abs(y - v.y);
+
+	return atan2(opposite, adjacent) * (180 / Pi); 
+}
+
 Vec2& Vec2::operator = (const Vec2& v) {
 	x = v.x;
 	y = v.y;

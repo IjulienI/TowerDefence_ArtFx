@@ -1,10 +1,13 @@
 #include "game.h"
 
 Game::Game() {
+	LoadMap();
 	Init();
 }
 
 Game::Game(int index) {
+	this->mapIndex = index;
+	LoadMap();
 	Init();
 }
 
@@ -17,13 +20,40 @@ Game::~Game() {
 }
 
 void Game::Init() {
-	Load();
+
+	Enemy* test = new Boss(&gm);
+	test->SetPath(waypoints);
+	test->SetPosition(waypoints.front());
+	enemies.push_back(test);
 }
 
 void Game::Update(float dt) {
-	for (auto& enemy : enemies) {
-		enemy->Update(dt);
+	if (IsKeyPressed(KEY_D))
+		enemies[0]->SetDeath(true);
+
+	for (int i = 0; i < enemies.size(); i++) {
+		if (!enemies[i]->GetDeath()) {
+			enemies[i]->Update(dt);
+			break;
+		}
+		auto it = std::remove(enemies.begin(), enemies.end(), enemies[i]);
+		enemies[i]->~Enemy();
+		enemies.erase(it, enemies.end());
+
+		for (auto& tower : towers)
+			tower->SetEnemies(enemies);
 ;	}
+
+	for (auto& tower : towers) {
+		tower->Update(dt);
+	}
+	Vec2 mousePos = { GetMousePosition().x,GetMousePosition().y };
+
+	Tile* selectedTile = GetTileAtLocation(mousePos);
+	if (selectedTile) {
+		selectedTile->SetActivated(true);
+		selectedTile->SetClicked(IsMouseButtonDown(MOUSE_BUTTON_LEFT));
+	}
 }
 
 void Game::Draw() {	
@@ -32,12 +62,17 @@ void Game::Draw() {
 			map[i][j]->Draw();
 		}
 	}
+
 	for (auto& enemy : enemies) {
 		enemy->Draw();
 	}
+
+	for (auto& tower : towers) {
+		tower->Draw();
+	}
 }
 
-void Game::Load()
+void Game::LoadMap()
 {
 	Texture2D road = LoadTexture("textures/road.png");
 	Texture2D grass = LoadTexture("textures/grass.png");
@@ -82,7 +117,6 @@ void Game::Load()
 			else if (pixels[j * mapImage.width + i].r == 255 && pixels[j * mapImage.width + i].g == 0 && pixels[j * mapImage.width + i].b == 0) {
 				map[i][j]->SetTexture(obstacle);
 				map[i][j]->SetType(TileType::CASTLE);
-				obstacles.push_back(map[i][j]);
 			}
 			else if (pixels[j * mapImage.width + i].r == 255 && pixels[j * mapImage.width + i].g == 255 && pixels[j * mapImage.width + i].b == 255) {
 				map[i][j]->SetTexture(finish);
@@ -95,11 +129,6 @@ void Game::Load()
 	UnloadImageColors(pixels);
 
 	CleanPath(waypoints);
-
-	Enemy* test = new Enemy();
-	test->SetPath(waypoints);
-	test->SetPosition(waypoints.front());
-	enemies.push_back(test);
 }
 
 void Game::CleanPath(std::vector<Vec2>& waypoints) {
@@ -114,8 +143,9 @@ void Game::CleanPath(std::vector<Vec2>& waypoints) {
 		for (int i = 0; i < waypoints.size(); i++) {
 			Vec2 p1 = cleanPath.back();
 			Vec2 p2 = waypoints[i];
-			float distance = sqrt((p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y));
-			float angle = Angle(p1, p2);
+
+			float distance = p1.Distance(p2);
+			float angle = p1.Angle(p2);
 
 			//si la prochaine case est en face et a la bonne distance
 			if (distance == TILE_SIZE && angle == lastAngle) {
@@ -148,11 +178,12 @@ void Game::CleanPath(std::vector<Vec2>& waypoints) {
 	waypoints = cleanPath;
 }
 
-float Game::Angle(const Vec2& a, const Vec2& b) {
-	float opposite = abs(a.x - b.x);
-	float adjacent = abs(a.y - b.y);
-
-	float angle = atan2(opposite, adjacent);
-
-	return angle;
+Tile* Game::GetTileAtLocation(Vec2 location) {	
+	for (int i = 0; i < TILE_NUM.x; i++) {
+		for (int j = 0; j < TILE_NUM.y; j++) {
+			if (map[i][j]->Contains(location))
+				return map[i][j];
+		}
+	}
+	return nullptr;
 }

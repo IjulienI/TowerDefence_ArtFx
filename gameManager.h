@@ -6,7 +6,7 @@ class gameManager
 {
 private:
 	int castleLife = 0;
-	int castleMaxLife = 100;
+	int castleMaxLife = 5000;
 
 	int currentRound = 0;
 	int maxRound = 5;
@@ -16,11 +16,14 @@ private:
 
 	int currentWaveCount = 0;
 	int nextWaveCount = 15;
+
+	int money = 0;
 public:
 	gameManager();
 	~gameManager();
 
 	void ApplyDamage(int amount);
 	void ApplyRegen(int amount);
+	void AddMoney(int amount);
 	void CastleDead();
 };

@@ -9,14 +9,21 @@ gameManager::~gameManager(){
 
 void gameManager::ApplyDamage(int amount) {
 	castleLife -= amount;
-	if (castleLife <= 0)
+	if (castleLife <= 0) {
 		CastleDead();
+		castleLife = 0;
+	}
+	std::cout << castleLife << std::endl;
 }
 
 void gameManager::ApplyRegen(int amount) {
 	castleLife += amount;
 	if (castleLife > castleMaxLife)
 		castleLife = castleMaxLife;
+}
+
+void gameManager::AddMoney(int amount) {
+	money += amount;
 }
 
 void gameManager::CastleDead() {

@@ -1,9 +1,13 @@
 #ifndef VEC2_H
 #define VEC2_H
 
+#include <cmath>
+
 struct Vec2 {
     float x;
     float y;
+
+    float Pi = 3.14159265358979323846f;
 
     Vec2();
     Vec2(float x, float y);
@@ -24,6 +28,9 @@ struct Vec2 {
 
     float Dot(const Vec2& v) const;          // v1.Dot(v2)
     float Cross(const Vec2& v) const;        // v1.Cross(v2)
+    float Distance(const Vec2& v) const;
+    float Angle(const Vec2& v) const;
+    float AngleDegre(const Vec2& v) const;
 
     Vec2& operator = (const Vec2& v);        // v1 = v2
     bool operator == (const Vec2& v) const;  // v1 == v2

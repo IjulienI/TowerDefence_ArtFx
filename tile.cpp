@@ -9,6 +9,8 @@ Tile::Tile(Vec2 position) {
 
 Tile::~Tile() {
 	UnloadTexture(texture);
+	UnloadTexture(border);
+	UnloadTexture(tileClicked);
 }
 
 void Tile::SetPosition(Vec2 position) {
@@ -28,6 +30,15 @@ void Tile::SetTexture(Texture2D& texture) {
 
 void Tile::Draw() {
 	DrawTexture(texture, position.x, position.y, WHITE);
+	if (isActivated) {
+		if (isClicked) {
+			DrawTexture(tileClicked, position.x, position.y, WHITE);			
+		}
+		else {
+			DrawTexture(border, position.x, position.y, WHITE);
+		}
+		isActivated = false;
+	}
 }
 
 Vec2 Tile::GetPosition() {
@@ -48,4 +59,12 @@ bool Tile::GetActivated() {
 
 void Tile::SetActivated(bool status) {
 	isActivated = status;
+}
+
+void Tile::SetClicked(bool status) {
+	isClicked = status;
+}
+
+bool Tile::Contains(Vec2 position) {
+	return (position.x >= this->position.x && position.x <= this->position.x + TILE_SIZE && position.y >= this->position.y && position.y <= this->position.y + TILE_SIZE);
 }

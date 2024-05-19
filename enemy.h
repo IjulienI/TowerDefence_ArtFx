@@ -5,39 +5,68 @@
 #include <vector>
 #include <math.h>
 #include "gameManager.h"
+#include <iostream>
 
 class Enemy {
-private:
-	Texture2D texture = LoadTexture("textures/base.png");
-	Vec2 position = { 0,0 };
-	Vec2 size = { 0,0 };
+protected:
+	Texture2D texture;
+	Vec2 position;
+	Vec2 size;
 	std::vector<Vec2> path;
-	float rotation = 0;
-	float rotationSpeed = 300;
-	float speed = 50;
 
-	int health = 0;
-	int damage = 0;
-	int drop = 0;
+	float rotation;
+	float speed;
+	float rotationSpeed;
+
+	int health;
+	int damage;
+	int drop;	
+
+	int attackDelay;
+	float delay;
+
+	bool dead = false;
+
+	gameManager* gm;
+	
+	virtual void MoveToward(const Vec2 target, float dt);
+	virtual void UpdateRotation(const Vec2 direction, float dt);
+	virtual void MakeDamage(float dt);
+
+	virtual void IsDead();
 public:
-	Enemy();
-	~Enemy();
+	virtual ~Enemy();
 
-	void Update(float dt);
-	void Draw();
+	virtual void Update(float dt);
+	virtual void Draw();
 
-	void SetPosition(Vec2 position);
-	Vec2 GetPosition();
+	virtual void SetPosition(const Vec2 position);
+	virtual Vec2 GetPosition();
 
-	void SetPath(std::vector<Vec2> path);
+	virtual void SetPath(std::vector<Vec2> path);
 
-	void MoveToward(Vec2 target, float dt);
-	void UpdateRotation(Vec2 direction, float dt);
+	virtual void ApplyDamage(const int amount);
+
+	virtual bool GetDeath();
+	virtual void SetDeath(const bool status);
 };
 
-//class SmallEnemy : public Enemy {
-//private:
-//
-//public:
-//	SmallEnemy();
-//};
+class SmallEnemy : public Enemy {
+public:
+	SmallEnemy(gameManager* gameManager);
+};
+
+class MidEnemy : public Enemy {
+public:
+	MidEnemy(gameManager* gameManager);
+};
+
+class BigEnemy : public Enemy {
+public:
+	BigEnemy(gameManager* gameManager);
+};
+
+class Boss : public Enemy {
+public:
+	Boss(gameManager* gameManager);
+};
