@@ -28,8 +28,8 @@ void Game::Init() {
 }
 
 void Game::Update(float dt) {
-	if (IsKeyPressed(KEY_D))
-		enemies[0]->SetDeath(true);
+	MouseSystem();
+	Inputs();
 
 	for (int i = 0; i < enemies.size(); i++) {
 		if (!enemies[i]->GetDeath()) {
@@ -46,13 +46,6 @@ void Game::Update(float dt) {
 
 	for (auto& tower : towers) {
 		tower->Update(dt);
-	}
-	Vec2 mousePos = { GetMousePosition().x,GetMousePosition().y };
-
-	Tile* selectedTile = GetTileAtLocation(mousePos);
-	if (selectedTile) {
-		selectedTile->SetActivated(true);
-		selectedTile->SetClicked(IsMouseButtonDown(MOUSE_BUTTON_LEFT));
 	}
 }
 
@@ -74,11 +67,6 @@ void Game::Draw() {
 
 void Game::LoadMap()
 {
-	Texture2D road = LoadTexture("textures/road.png");
-	Texture2D grass = LoadTexture("textures/grass.png");
-	Texture2D finish = LoadTexture("textures/finish.png");
-	Texture2D obstacle = LoadTexture("textures/obstacle.png");
-
 	Image mapImage = LoadImage("textures/base.png");
 
 	std::string path = "textures/maps";
@@ -113,10 +101,6 @@ void Game::LoadMap()
 			else if (pixels[j * mapImage.width + i].r == 0 && pixels[j * mapImage.width + i].g == 255 && pixels[j * mapImage.width + i].b == 0) {
 				map[i][j]->SetTexture(grass);
 				map[i][j]->SetType(TileType::GRASS);
-			}
-			else if (pixels[j * mapImage.width + i].r == 255 && pixels[j * mapImage.width + i].g == 0 && pixels[j * mapImage.width + i].b == 0) {
-				map[i][j]->SetTexture(obstacle);
-				map[i][j]->SetType(TileType::CASTLE);
 			}
 			else if (pixels[j * mapImage.width + i].r == 255 && pixels[j * mapImage.width + i].g == 255 && pixels[j * mapImage.width + i].b == 255) {
 				map[i][j]->SetTexture(finish);
@@ -186,4 +170,42 @@ Tile* Game::GetTileAtLocation(Vec2 location) {
 		}
 	}
 	return nullptr;
+}
+
+void Game::MouseSystem() {
+	Vec2 mousePos = { GetMousePosition().x,GetMousePosition().y };
+
+	mouseOn = GetTileAtLocation(mousePos);
+	if (!mouseOn)
+		return;
+	mouseOn->SetActivated(true);
+}
+
+void Game::Inputs() {
+	if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+		if (!mouseOn)
+			return;
+
+		mouseOn->SetClicked(true);
+		if (mouseOn->GetType() == TileType::GRASS) {
+			mouseOn->SetType(TileType::TOWER);
+			mouseOn->SetTexture(turretBase);
+			Towers* tower = new Towers();
+			tower->SetPosition(mouseOn->GetCenter());
+			tower->SetEnemies(enemies);
+			towers.push_back(tower);
+		}
+	}
+	if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
+		if (!mouseOn)
+			return;
+
+		mouseOn->SetClicked(false);
+	}
+	if (IsKeyPressed(KEY_A)) {
+		enemies[0]->SetDeath(true);
+	}
+	if (IsKeyPressed(KEY_D)) {
+		enemies[0]->SetDeath(true);
+	}
 }

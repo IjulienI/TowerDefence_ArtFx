@@ -11,13 +11,20 @@ private:
 	int damage = 0;
 	int shootDelay = 0;
 
+	int range = 15;
+
 	float rotation = 0;
 
 	Vec2 position = { 0,0 };
+	Vec2 size = { 25,20 };
 
-	Texture2D texture = LoadTexture("textures/base.png");
+	Texture2D turret = LoadTexture("textures/towers/weapon.png");
 
 	std::vector<Enemy*> enemies;
+	Enemy* nearestEnemy = nullptr;
+
+	Enemy* GetNearestEnemy(std::vector<Enemy*> enemies);
+	void SetRotation();
 public:
 	Towers();
 	Towers(std::vector<Enemy*> enemies);
@@ -26,5 +33,7 @@ public:
 	void Update(float dt);
 	void Draw();
 	void SetEnemies(std::vector<Enemy*> enemies);
+
+	void SetPosition(Vec2 position);
 };
 

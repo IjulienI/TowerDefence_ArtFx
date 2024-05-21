@@ -22,10 +22,7 @@ void Tile::SetType(TileType type) {
 }
 
 void Tile::SetTexture(Texture2D& texture) {
-	if (IsTextureReady(texture)) {
-		UnloadTexture(this->texture);
-		this->texture = texture;
-	}
+	this->texture = texture;
 }
 
 void Tile::Draw() {

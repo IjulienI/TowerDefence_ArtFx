@@ -24,7 +24,13 @@ public:
 private:
 	void LoadMap();
 
+	Texture2D road = LoadTexture("textures/road.png");
+	Texture2D grass = LoadTexture("textures/grass.png");
+	Texture2D finish = LoadTexture("textures/finish.png");
+	Texture2D turretBase = LoadTexture("textures/towers/base.png");
+
 	Tile* map[16][11];
+	Tile* mouseOn;
 
 	std::vector<Vec2> waypoints;
 	std::vector<Enemy*> enemies;
@@ -35,6 +41,8 @@ private:
 
 	void CleanPath(std::vector<Vec2>& waypoints);
 	Tile* GetTileAtLocation(Vec2 location);
+	void MouseSystem();
+	void Inputs();
 
 	int mapIndex = 0;
 };

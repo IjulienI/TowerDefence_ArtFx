@@ -17,7 +17,7 @@ public:
 
 	void Update(float dt);
 	void Draw();
-
+	
 	void ChangeScene(Scenes newScene);
 	void LoadMap(int index);
 private:
