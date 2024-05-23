@@ -32,13 +32,7 @@ void Game::Update(float dt) {
 	Inputs();
 
 	for (int i = 0; i < enemies.size(); i++) {
-		if (!enemies[i]->GetDeath()) {
-			enemies[i]->Update(dt);
-			break;
-		}
-		auto it = std::remove(enemies.begin(), enemies.end(), enemies[i]);
-		enemies[i]->~Enemy();
-		enemies.erase(it, enemies.end());
+		enemies[i]->Update(dt);
 
 		for (auto& tower : towers)
 			tower->SetEnemies(enemies);
@@ -46,6 +40,38 @@ void Game::Update(float dt) {
 
 	for (auto& tower : towers) {
 		tower->Update(dt);
+		if (tower->CanShoot(dt)) {
+			Ball* ball = new Ball();
+			ball->SetPositionAndRotation(tower->GetPosition(), tower->GetRotation());
+			ball->SetDamage(tower->GetDamage());
+			balls.push_back(ball);
+		}
+	}
+
+	for (auto& ball : balls) {
+		if (ball->GetDeath()) {
+
+			auto it = std::remove(balls.begin(), balls.end(), ball);
+			ball->~Ball();
+			balls.erase(it, balls.end());
+		}
+
+		ball->Update(dt);
+		for (auto& enemy : enemies) {
+			if (ball->DetectCollision(enemy)) {
+				enemy->ApplyDamage(ball->GetDamage());
+
+				auto it = std::remove(balls.begin(), balls.end(), ball);
+				ball->~Ball();
+				balls.erase(it, balls.end());
+
+				if (enemy->GetDeath()) {
+					auto it = std::remove(enemies.begin(), enemies.end(), enemy);
+					enemy->~Enemy();
+					enemies.erase(it, enemies.end());
+				}
+			}
+		}
 	}
 }
 
@@ -60,9 +86,14 @@ void Game::Draw() {
 		enemy->Draw();
 	}
 
+	for (auto& ball : balls) {
+		ball->Draw();
+	}
+
 	for (auto& tower : towers) {
 		tower->Draw();
 	}
+
 }
 
 void Game::LoadMap()

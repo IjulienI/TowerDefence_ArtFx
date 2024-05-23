@@ -11,6 +11,7 @@
 #include <algorithm>
 #include "gameManager.h"
 #include <iostream>
+#include "ball.h"
 
 class Game : public Scene {
 public:
@@ -35,6 +36,7 @@ private:
 	std::vector<Vec2> waypoints;
 	std::vector<Enemy*> enemies;
 	std::vector<Towers*> towers;
+	std::vector<Ball*> balls;
 
 	Vec2 start;
 	gameManager gm;

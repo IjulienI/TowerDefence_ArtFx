@@ -4,14 +4,16 @@
 #include "Vec2.h"
 #include "raylib.h"
 #include "enemy.h"
+#include "ball.h"
 
 class Towers {
 private:
 	int targetDistance = 0;
-	int damage = 0;
-	int shootDelay = 0;
+	int damage = 1;
+	float shootDelay = 0.4;
+	float delay = 0;
 
-	int range = 15;
+	int range = 150;
 
 	float rotation = 0;
 
@@ -31,8 +33,14 @@ public:
 	~Towers();
 
 	void Update(float dt);
+	bool CanShoot(float dt);
 	void Draw();
 	void SetEnemies(std::vector<Enemy*> enemies);
+
+	Vec2 GetPosition();
+	float GetRotation();
+
+	int GetDamage();
 
 	void SetPosition(Vec2 position);
 };

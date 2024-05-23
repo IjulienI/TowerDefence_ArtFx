@@ -17,6 +17,7 @@ protected:
 	float rotation;
 	float speed;
 	float rotationSpeed;
+	float radius;
 
 	int health;
 	int damage;
@@ -32,8 +33,6 @@ protected:
 	virtual void MoveToward(const Vec2 target, float dt);
 	virtual void UpdateRotation(const Vec2 direction, float dt);
 	virtual void MakeDamage(float dt);
-
-	virtual void IsDead();
 public:
 	virtual ~Enemy();
 
@@ -42,8 +41,12 @@ public:
 
 	virtual void SetPosition(const Vec2 position);
 	virtual Vec2 GetPosition();
+	virtual Vec2 GetSize();
 
 	virtual void SetPath(std::vector<Vec2> path);
+
+	virtual void SetRadius();
+	virtual float GetRadius();
 
 	virtual void ApplyDamage(const int amount);
 

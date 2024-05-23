@@ -135,6 +135,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="application.cpp" />
+    <ClCompile Include="ball.cpp" />
     <ClCompile Include="debug.cpp" />
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="game.cpp" />
@@ -150,6 +151,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="application.h" />
+    <ClInclude Include="ball.h" />
     <ClInclude Include="constant.h" />
     <ClInclude Include="debug.h" />
     <ClInclude Include="enemy.h" />

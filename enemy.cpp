@@ -23,6 +23,8 @@ void Enemy::Draw() {
 	Rectangle enemy = { position.x,position.y,size.x,size.y };
 
 	DrawTexturePro(texture, { 0,0,(float)texture.width,(float)texture.height }, enemy, { size.x / 2,size.y / 2 }, rotation, WHITE);
+	
+	DrawCircleLines(position.x, position.y, radius, RED);
 }
 
 void Enemy::SetPosition(const Vec2 position) {
@@ -31,6 +33,21 @@ void Enemy::SetPosition(const Vec2 position) {
 
 Vec2 Enemy::GetPosition() {
 	return position;
+}
+
+Vec2 Enemy::GetSize() {
+	return size;
+}
+
+void Enemy::SetRadius() {
+	if (size.x > size.y)
+		radius = size.x / 2;
+	else
+		radius = size.y / 2;
+}
+
+float Enemy::GetRadius() {
+	return radius;
 }
 
 void Enemy::SetPath(std::vector<Vec2> path) {
@@ -50,25 +67,20 @@ void Enemy::MoveToward(const Vec2 target, float dt) {
 }
 
 void Enemy::UpdateRotation(const Vec2 direction, float dt) {
-	float targetRotation = atan2(direction.y, direction.x) * (180/PI);
+	float targetRotation = atan2(direction.y, direction.x) * (180 / PI);
 
 	float difference = targetRotation - rotation;
 
 	if (difference > 180) difference -= 360;
 	else if (difference < -180) difference += 360;
 
-	if (difference > 0) 
+	if (difference > 0)
 		rotation += rotationSpeed * dt;
-	else if (difference < 0) 
+	else if (difference < 0)
 		rotation -= rotationSpeed * dt;
 
 	if (abs(difference) < 10)
 		rotation = targetRotation;
-}
-
-void Enemy::IsDead(){
-	if (health <= 0)
-		dead = true;
 }
 
 void Enemy::MakeDamage(float dt) {
@@ -81,6 +93,9 @@ void Enemy::MakeDamage(float dt) {
 
 void Enemy::ApplyDamage(const int amount) {
 	health -= amount;
+	if (health <= 0)
+		dead = true;
+	std::cout << health << std::endl;
 }
 
 bool Enemy::GetDeath() {
@@ -106,6 +121,7 @@ SmallEnemy::SmallEnemy(gameManager* gameManager) {
 	delay = attackDelay - 0.2;
 
 	this->gm = gameManager;
+	SetRadius();
 }
 MidEnemy::MidEnemy(gameManager* gameManager) {
 	texture = LoadTexture("textures/enemies/midEnemy.png");
@@ -121,6 +137,7 @@ MidEnemy::MidEnemy(gameManager* gameManager) {
 	delay = attackDelay - 0.2;
 
 	this->gm = gameManager;
+	SetRadius();
 }
 BigEnemy::BigEnemy(gameManager* gameManager) {
 	texture = LoadTexture("textures/enemies/bigEnemy.png");
@@ -136,14 +153,15 @@ BigEnemy::BigEnemy(gameManager* gameManager) {
 	delay = attackDelay - 0.2;
 
 	this->gm = gameManager;
+	SetRadius();
 }
 Boss::Boss(gameManager* gameManager) {
 	texture = LoadTexture("textures/enemies/boss.png");
 	size = { 60,45 };
-	speed = 150;
+	speed = 35;
 	rotationSpeed = speed * 6;
 
-	health = 250;
+	health = 25000;
 	damage = 350;
 	drop = 250;
 
@@ -151,4 +169,5 @@ Boss::Boss(gameManager* gameManager) {
 	delay = attackDelay - 0.2;
 
 	this->gm = gameManager;
+	SetRadius();
 }
