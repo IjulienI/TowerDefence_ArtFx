@@ -224,7 +224,7 @@ void Game::Inputs() {
 			Towers* tower = new Towers();
 			tower->SetPosition(mouseOn->GetCenter());
 			tower->SetEnemies(enemies);
-			towers.push_back(tower);
+			towers.push_back(tower); 
 		}
 	}
 	if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
