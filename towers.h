@@ -10,10 +10,19 @@ class Towers {
 private:
 	int targetDistance = 0;
 	int damage = 1;
+	int level = 1;
+	int maxLevel = 5;
+
 	float shootDelay = 0.4;
-	float delay = 0;
+	float shootDelayCount = 0;
+
+	float interactionDelay = 0.2;
+	float interactionDelayCount = 0;
+
+	bool canInteract = true;
 
 	int range = 150;
+	int moneyToUpgrade = 200;
 
 	float rotation = 0;
 
@@ -40,7 +49,14 @@ public:
 	Vec2 GetPosition();
 	float GetRotation();
 
+	bool GetCanInteract();
+
 	int GetDamage();
+
+	bool CanUpgrade();
+	int GetPrice();
+	void Interact();
+	void Upgrade();
 
 	void SetPosition(Vec2 position);
 };

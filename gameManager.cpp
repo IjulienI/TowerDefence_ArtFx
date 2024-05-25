@@ -26,6 +26,14 @@ void gameManager::AddMoney(int amount) {
 	money += amount;
 }
 
+void gameManager::SubtractMoney(int amount) {
+	money -= amount;
+}
+
 void gameManager::CastleDead() {
 	std::cout << "Castle Destroyed" << std::endl;
+}
+
+int gameManager::GetMoney() {
+	return money;
 }

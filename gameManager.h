@@ -17,7 +17,7 @@ private:
 	int currentWaveCount = 0;
 	int nextWaveCount = 15;
 
-	int money = 0;
+	int money = 100000;
 public:
 	gameManager();
 	~gameManager();
@@ -25,5 +25,7 @@ public:
 	void ApplyDamage(int amount);
 	void ApplyRegen(int amount);
 	void AddMoney(int amount);
+	void SubtractMoney(int amount);
 	void CastleDead();
+	int GetMoney();
 };

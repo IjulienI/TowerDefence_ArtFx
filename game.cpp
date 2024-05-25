@@ -224,7 +224,16 @@ void Game::Inputs() {
 			Towers* tower = new Towers();
 			tower->SetPosition(mouseOn->GetCenter());
 			tower->SetEnemies(enemies);
+			mouseOn->SetTower(tower);
 			towers.push_back(tower); 
+		}
+		if (mouseOn->GetType() == TileType::TOWER) {
+			Towers* tower = mouseOn->GetTower();
+			if (!tower->GetCanInteract() && tower->CanUpgrade() && gm.GetMoney() > tower->GetPrice())
+				return;
+			tower->Upgrade();
+			gm.SubtractMoney(tower->GetPrice());
+			tower->Interact();
 		}
 	}
 	if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {

@@ -4,6 +4,7 @@
 #include "tileType.h"
 #include "Vec2.h"
 #include <iostream>
+#include "towers.h"
 
 class Tile {
 public:
@@ -22,6 +23,9 @@ public:
 	Vec2 GetCenter();
 	TileType GetType();
 
+	Towers* GetTower();
+	void SetTower(Towers* tower);
+
 	bool GetActivated();
 	void SetActivated(bool status);
 
@@ -34,6 +38,8 @@ private:
 	Texture2D texture = LoadTexture("textures/base.png");
 	Texture2D border = LoadTexture("textures/border.png");
 	Texture2D tileClicked = LoadTexture("textures/clickedTile.png");
+
+	Towers* linkedTower = nullptr;
 
 	bool isActivated = false;
 	bool isClicked = false;

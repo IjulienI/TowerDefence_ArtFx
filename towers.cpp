@@ -31,9 +31,9 @@ bool Towers::CanShoot(float dt) {
 	if (!nearestEnemy)
 		return false;
 
-	delay += 1 * dt;
-	if (delay >= shootDelay) {
-		delay = 0;
+	shootDelayCount += 1 * dt;
+	if (shootDelayCount >= shootDelay) {
+		shootDelayCount = 0;
 		return true;
 	}
 
@@ -41,11 +41,11 @@ bool Towers::CanShoot(float dt) {
 }
 
 Towers::Towers() {
-	delay = shootDelay;
+	shootDelayCount = shootDelay;
 }
 
 Towers::Towers(std::vector<Enemy*> enemies) {
-	delay = shootDelay;
+	shootDelayCount = shootDelay;
 	SetEnemies(enemies);
 }
 
@@ -56,6 +56,14 @@ Towers::~Towers() {
 void Towers::Update(float dt) {
 	nearestEnemy = GetNearestEnemy(enemies);
 	SetRotation();
+	if (canInteract)
+		return;
+
+	interactionDelayCount += 1 * dt;
+	if (interactionDelayCount >= interactionDelay) {
+		interactionDelayCount = 0;
+		canInteract = true;
+	}
 }
 
 void Towers::Draw() {
@@ -80,8 +88,28 @@ float Towers::GetRotation() {
 	return rotation;
 }
 
+bool Towers::GetCanInteract() {
+	return canInteract;
+}
+
 int Towers::GetDamage() {
 	return damage;
+}
+
+bool Towers::CanUpgrade() {
+	return level < maxLevel;
+}
+
+int Towers::GetPrice() {
+	return moneyToUpgrade;
+}
+
+void Towers::Interact() {
+	canInteract = false;
+}
+
+void Towers::Upgrade() {
+	level++;
 }
 
 void Towers::SetPosition(Vec2 position) {

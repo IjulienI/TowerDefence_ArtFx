@@ -50,6 +50,14 @@ TileType Tile::GetType() {
 	return type;
 }
 
+Towers* Tile::GetTower() {
+	return linkedTower;
+}
+
+void Tile::SetTower(Towers* tower) {
+	linkedTower = tower;
+}
+
 bool Tile::GetActivated() {
 	return isActivated;
 }
