@@ -64,6 +64,8 @@ bool Tile::GetActivated() {
 
 void Tile::SetActivated(bool status) {
 	isActivated = status;
+	if (linkedTower)
+		linkedTower->SetHighLight(status);
 }
 
 void Tile::SetClicked(bool status) {

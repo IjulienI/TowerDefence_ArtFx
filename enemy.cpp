@@ -1,6 +1,7 @@
 #include "enemy.h"
 
 Enemy::~Enemy() {
+	position = { -1000,-1000 };
 	gm->AddMoney(drop);
 	UnloadTexture(texture);
 	std::cout << "Enemy Destroy" << std::endl;

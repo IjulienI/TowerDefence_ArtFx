@@ -20,9 +20,11 @@ private:
 	float interactionDelayCount = 0;
 
 	bool canInteract = true;
+	bool hightLight = false;
 
 	int range = 150;
 	int moneyToUpgrade = 200;
+	int moneyToSell = 100;
 
 	float rotation = 0;
 
@@ -30,12 +32,14 @@ private:
 	Vec2 size = { 25,20 };
 
 	Texture2D turret = LoadTexture("textures/towers/weapon.png");
+	Color color = WHITE;
 
 	std::vector<Enemy*> enemies;
 	Enemy* nearestEnemy = nullptr;
 
 	Enemy* GetNearestEnemy(std::vector<Enemy*> enemies);
 	void SetRotation();
+	void ApplyNewLevel();
 public:
 	Towers();
 	Towers(std::vector<Enemy*> enemies);
@@ -50,11 +54,13 @@ public:
 	float GetRotation();
 
 	bool GetCanInteract();
+	void SetHighLight(bool value);
 
 	int GetDamage();
 
 	bool CanUpgrade();
 	int GetPrice();
+	int GetSell();
 	void Interact();
 	void Upgrade();
 

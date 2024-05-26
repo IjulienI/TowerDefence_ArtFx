@@ -20,7 +20,6 @@ Game::~Game() {
 }
 
 void Game::Init() {
-
 	Enemy* test = new Boss(&gm);
 	test->SetPath(waypoints);
 	test->SetPosition(waypoints.front());
@@ -94,6 +93,21 @@ void Game::Draw() {
 		tower->Draw();
 	}
 
+	if (displayPrice) {
+		Towers* tower = mouseOn->GetTower();
+		int needMoney = tower->GetPrice();
+		int sellMoney = tower->GetSell();
+		Color canBuy;
+		if (needMoney < gm.GetMoney())
+			canBuy = GREEN;
+		else
+			canBuy = RED;
+
+		DrawRectangle(mousePos.x, mousePos.y, 125, 72, { 0,0,0,125 });
+
+		DrawText(TextFormat("Upgrade : %i", needMoney), mousePos.x + 10, mousePos.y + 20, 16, canBuy);
+		DrawText(TextFormat("Sell : %i", sellMoney), mousePos.x + 10, mousePos.y + 40, 16, RED);
+	}
 }
 
 void Game::LoadMap()
@@ -204,12 +218,17 @@ Tile* Game::GetTileAtLocation(Vec2 location) {
 }
 
 void Game::MouseSystem() {
-	Vec2 mousePos = { GetMousePosition().x,GetMousePosition().y };
+	mousePos = { GetMousePosition().x,GetMousePosition().y };
 
 	mouseOn = GetTileAtLocation(mousePos);
 	if (!mouseOn)
 		return;
 	mouseOn->SetActivated(true);
+
+	if (mouseOn->GetType() == TileType::TOWER)
+		displayPrice = true;
+	else
+		displayPrice = false;
 }
 
 void Game::Inputs() {
@@ -222,6 +241,7 @@ void Game::Inputs() {
 			mouseOn->SetType(TileType::TOWER);
 			mouseOn->SetTexture(turretBase);
 			Towers* tower = new Towers();
+			tower->Interact();
 			tower->SetPosition(mouseOn->GetCenter());
 			tower->SetEnemies(enemies);
 			mouseOn->SetTower(tower);
@@ -229,11 +249,12 @@ void Game::Inputs() {
 		}
 		if (mouseOn->GetType() == TileType::TOWER) {
 			Towers* tower = mouseOn->GetTower();
-			if (!tower->GetCanInteract() && tower->CanUpgrade() && gm.GetMoney() > tower->GetPrice())
+			if (!(tower->GetCanInteract() && tower->CanUpgrade() && gm.GetMoney() > tower->GetPrice()))
 				return;
+
+			tower->Interact();
 			tower->Upgrade();
 			gm.SubtractMoney(tower->GetPrice());
-			tower->Interact();
 		}
 	}
 	if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {

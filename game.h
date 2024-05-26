@@ -39,7 +39,10 @@ private:
 	std::vector<Ball*> balls;
 
 	Vec2 start;
+	Vec2 mousePos;
 	gameManager gm;
+
+	bool displayPrice;
 
 	void CleanPath(std::vector<Vec2>& waypoints);
 	Tile* GetTileAtLocation(Vec2 location);
