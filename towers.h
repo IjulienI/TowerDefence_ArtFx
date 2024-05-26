@@ -61,6 +61,7 @@ public:
 	bool CanUpgrade();
 	int GetPrice();
 	int GetSell();
+	bool IsLevelMax();
 	void Interact();
 	void Upgrade();
 

@@ -12,6 +12,7 @@ Application::~Application(){
 void Application::Init()
 {
 	InitWindow(WINDOW_SIZE.x, WINDOW_SIZE.y, "TowerDefence - ArtFx");
+	//SetWindowState(FLAG_FULLSCREEN_MODE);
 	SetTargetFPS(FRAME_LIMIT);
 
 	sceneManager = new SceneManager();

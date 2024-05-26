@@ -94,7 +94,6 @@ Towers::Towers(std::vector<Enemy*> enemies) {
 }
 
 Towers::~Towers() {
-	UnloadTexture(turret);
 }
 
 void Towers::Update(float dt) {
@@ -160,6 +159,10 @@ int Towers::GetPrice() {
 
 int Towers::GetSell() {
 	return moneyToSell;
+}
+
+bool Towers::IsLevelMax() {
+	return level == maxLevel;
 }
 
 void Towers::Interact() {

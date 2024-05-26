@@ -94,7 +94,11 @@ void Game::Draw() {
 	}
 
 	if (displayPrice) {
+		if (!mouseOn)
+			return;
 		Towers* tower = mouseOn->GetTower();
+		if (!tower)
+			return;
 		int needMoney = tower->GetPrice();
 		int sellMoney = tower->GetSell();
 		Color canBuy;
@@ -105,7 +109,11 @@ void Game::Draw() {
 
 		DrawRectangle(mousePos.x, mousePos.y, 125, 72, { 0,0,0,125 });
 
-		DrawText(TextFormat("Upgrade : %i", needMoney), mousePos.x + 10, mousePos.y + 20, 16, canBuy);
+		if(tower->IsLevelMax())
+			DrawText("Upgrade : MAX", mousePos.x + 10, mousePos.y + 20, 16, YELLOW);
+		else
+			DrawText(TextFormat("Upgrade : %i", needMoney), mousePos.x + 10, mousePos.y + 20, 16, canBuy);
+
 		DrawText(TextFormat("Sell : %i", sellMoney), mousePos.x + 10, mousePos.y + 40, 16, RED);
 	}
 }
@@ -262,6 +270,18 @@ void Game::Inputs() {
 			return;
 
 		mouseOn->SetClicked(false);
+	}
+	if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
+		if (!mouseOn || mouseOn->GetType() != TileType::TOWER)
+			return;
+
+		Towers* tower = mouseOn->GetTower();
+		gm.AddMoney(tower->GetSell());
+		auto it = std::remove(towers.begin(), towers.end(), tower);
+		tower->~Towers();
+		towers.erase(it, towers.end());
+		mouseOn->SetType(TileType::GRASS);
+		mouseOn->SetTexture(grass);
 	}
 	if (IsKeyPressed(KEY_A)) {
 		enemies[0]->SetDeath(true);
