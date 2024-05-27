@@ -28,21 +28,13 @@ void Towers::SetRotation() {
 }
 
 void Towers::ApplyNewLevel() {
-	if(level == 1) {
-		color = WHITE;
-		shootDelay = 0.4;
-		damage = 1;
-		range = 150;
-		moneyToUpgrade = 300;
-		moneyToSell = moneyToUpgrade / 2;
-	}
 	if (level == 2) {
 		color = GRAY;
 		shootDelay = 0.2;
 		damage = 1;
 		range = 150;
 		moneyToUpgrade = 1000;
-		moneyToSell = 150;
+		moneyToSell = 100;
 	}
 	else if (level == 3) {
 		color = YELLOW;
