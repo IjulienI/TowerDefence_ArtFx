@@ -20,24 +20,20 @@ Game::~Game() {
 }
 
 void Game::Init() {
-	Enemy* test = new Boss(&gm);
-	test->SetPath(waypoints);
-	test->SetPosition(waypoints.front());
-	enemies.push_back(test);
+	enemySpawner = new EnemySpawner();
+	enemySpawner->SetGameMode(&gm);
+	enemySpawner->SetWayPoints(waypoints);
+	enemySpawner->StartWave();
 }
 
 void Game::Update(float dt) {
 	MouseSystem();
 	Inputs();
 
-	for (int i = 0; i < enemies.size(); i++) {
-		enemies[i]->Update(dt);
-
-		for (auto& tower : towers)
-			tower->SetEnemies(enemies);
-;	}
+	enemySpawner->Update(dt);
 
 	for (auto& tower : towers) {
+		tower->SetEnemies(enemySpawner->GetEnemies());
 		tower->Update(dt);
 		if (tower->CanShoot(dt)) {
 			Ball* ball = new Ball();
@@ -56,7 +52,7 @@ void Game::Update(float dt) {
 		}
 
 		ball->Update(dt);
-		for (auto& enemy : enemies) {
+		for (auto& enemy : enemySpawner->GetEnemies()) {
 			if (ball->DetectCollision(enemy)) {
 				enemy->ApplyDamage(ball->GetDamage());
 
@@ -64,14 +60,14 @@ void Game::Update(float dt) {
 				ball->~Ball();
 				balls.erase(it, balls.end());
 
-				if (enemy->GetDeath()) {
-					auto it = std::remove(enemies.begin(), enemies.end(), enemy);
-					enemy->~Enemy();
-					enemies.erase(it, enemies.end());
-				}
 			}
 		}
 	}
+
+	gm.Update(dt);
+
+	if (gm.GetRestart())
+		sceneManager->ChangeScene(Scenes::MENU);
 }
 
 void Game::Draw() {	
@@ -79,11 +75,7 @@ void Game::Draw() {
 		for (int j = 0; j < TILE_NUM.y; j++) {
 			map[i][j]->Draw();
 		}
-	}
-
-	for (auto& enemy : enemies) {
-		enemy->Draw();
-	}
+	}	
 
 	for (auto& ball : balls) {
 		ball->Draw();
@@ -93,16 +85,34 @@ void Game::Draw() {
 		tower->Draw();
 	}
 
+	enemySpawner->Draw();
+
+	if (!mouseOn)
+		return;
+
+	if (mouseOn->GetType() == TileType::GRASS) {
+
+		int needMoney = 50;
+
+		Color canBuy;
+
+		if (needMoney <= gm.GetMoney())
+			canBuy = GREEN;
+		else
+			canBuy = RED;
+
+		DrawRectangle(mousePos.x, mousePos.y, 125, 54, { 0,0,0,125 });
+
+		DrawText(TextFormat("Buy tower : %i", needMoney), mousePos.x + 10, mousePos.y + 20, 16, canBuy);
+	}
+
 	if (displayPrice) {
-		if (!mouseOn)
-			return;
+
 		Towers* tower = mouseOn->GetTower();
-		if (!tower)
-			return;
 		int needMoney = tower->GetPrice();
 		int sellMoney = tower->GetSell();
 		Color canBuy;
-		if (needMoney < gm.GetMoney())
+		if (needMoney <= gm.GetMoney())
 			canBuy = GREEN;
 		else
 			canBuy = RED;
@@ -116,6 +126,8 @@ void Game::Draw() {
 
 		DrawText(TextFormat("Sell : %i", sellMoney), mousePos.x + 10, mousePos.y + 40, 16, RED);
 	}
+
+	gm.Draw();
 }
 
 void Game::LoadMap()
@@ -246,23 +258,26 @@ void Game::Inputs() {
 
 		mouseOn->SetClicked(true);
 		if (mouseOn->GetType() == TileType::GRASS) {
-			mouseOn->SetType(TileType::TOWER);
-			mouseOn->SetTexture(turretBase);
-			Towers* tower = new Towers();
-			tower->Interact();
-			tower->SetPosition(mouseOn->GetCenter());
-			tower->SetEnemies(enemies);
-			mouseOn->SetTower(tower);
-			towers.push_back(tower); 
+			if (gm.GetMoney() >= 50) {
+				gm.SubtractMoney(50);
+				mouseOn->SetType(TileType::TOWER);
+				mouseOn->SetTexture(turretBase);
+				Towers* tower = new Towers();
+				tower->Interact();
+				tower->SetPosition(mouseOn->GetCenter());
+				tower->SetEnemies(enemySpawner->GetEnemies());
+				mouseOn->SetTower(tower);
+				towers.push_back(tower);
+			}
 		}
 		if (mouseOn->GetType() == TileType::TOWER) {
 			Towers* tower = mouseOn->GetTower();
-			if (!(tower->GetCanInteract() && tower->CanUpgrade() && gm.GetMoney() > tower->GetPrice()))
+			if (!(tower->GetCanInteract() && tower->CanUpgrade() && gm.GetMoney() >= tower->GetPrice()))
 				return;
 
 			tower->Interact();
-			tower->Upgrade();
 			gm.SubtractMoney(tower->GetPrice());
+			tower->Upgrade();
 		}
 	}
 	if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
@@ -282,11 +297,5 @@ void Game::Inputs() {
 		towers.erase(it, towers.end());
 		mouseOn->SetType(TileType::GRASS);
 		mouseOn->SetTexture(grass);
-	}
-	if (IsKeyPressed(KEY_A)) {
-		enemies[0]->SetDeath(true);
-	}
-	if (IsKeyPressed(KEY_D)) {
-		enemies[0]->SetDeath(true);
 	}
 }

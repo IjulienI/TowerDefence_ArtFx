@@ -33,40 +33,40 @@ void Towers::ApplyNewLevel() {
 		shootDelay = 0.4;
 		damage = 1;
 		range = 150;
-		moneyToUpgrade = 200;
-		moneyToSell = 50;
+		moneyToUpgrade = 300;
+		moneyToSell = moneyToUpgrade / 2;
 	}
 	if (level == 2) {
 		color = GRAY;
 		shootDelay = 0.2;
 		damage = 1;
 		range = 150;
-		moneyToUpgrade = 300;
-		moneyToSell = 100;
+		moneyToUpgrade = 1000;
+		moneyToSell = 150;
 	}
 	else if (level == 3) {
 		color = YELLOW;
 		shootDelay = 0.3;
 		damage = 2;
 		range = 165;
-		moneyToUpgrade = 500;
-		moneyToSell = 150;
+		moneyToUpgrade = 1500;
+		moneyToSell = 500;
 	}
 	else if (level == 4) {
 		color = RED;
 		shootDelay = 0.2;
 		damage = 3;
 		range = 165;
-		moneyToUpgrade = 1000;
-		moneyToSell = 250;
+		moneyToUpgrade = 5000;
+		moneyToSell = 750;
 	}
 	else if (level == 5) {
 		color = BLUE;
 		shootDelay = 0.1;
 		damage = 10;
 		range = 220;
-		moneyToUpgrade = 5000;
-		moneyToSell = 500;
+		moneyToUpgrade = 0;
+		moneyToSell = 2500;
 		size = { 30,25 };
 	}
 }

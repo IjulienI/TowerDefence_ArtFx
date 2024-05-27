@@ -12,6 +12,7 @@
 #include "gameManager.h"
 #include <iostream>
 #include "ball.h"
+#include "enemySpawner.h"
 
 class Game : public Scene {
 public:
@@ -33,8 +34,9 @@ private:
 	Tile* map[16][11];
 	Tile* mouseOn;
 
+	EnemySpawner* enemySpawner;
+
 	std::vector<Vec2> waypoints;
-	std::vector<Enemy*> enemies;
 	std::vector<Towers*> towers;
 	std::vector<Ball*> balls;
 

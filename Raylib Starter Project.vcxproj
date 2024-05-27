@@ -138,6 +138,7 @@
     <ClCompile Include="ball.cpp" />
     <ClCompile Include="debug.cpp" />
     <ClCompile Include="enemy.cpp" />
+    <ClCompile Include="enemySpawner.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="gameManager.cpp" />
     <ClCompile Include="main.cpp" />
@@ -155,6 +156,7 @@
     <ClInclude Include="constant.h" />
     <ClInclude Include="debug.h" />
     <ClInclude Include="enemy.h" />
+    <ClInclude Include="enemySpawner.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="gameManager.h" />
     <ClInclude Include="menu.h" />

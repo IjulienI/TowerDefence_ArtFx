@@ -19,7 +19,7 @@ protected:
 	float rotationSpeed;
 	float radius;
 
-	int health;
+	float health;
 	int damage;
 	int drop;	
 
@@ -49,9 +49,13 @@ public:
 	virtual float GetRadius();
 
 	virtual void ApplyDamage(const int amount);
+	virtual void SetLifeMultiplier(const int time);
 
 	virtual bool GetDeath();
 	virtual void SetDeath(const bool status);
+
+	virtual int GetDrop();
+	virtual void SetDropMultiplier(const int time);
 };
 
 class SmallEnemy : public Enemy {

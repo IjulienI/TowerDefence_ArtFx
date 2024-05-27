@@ -7,6 +7,22 @@ gameManager::gameManager(){
 gameManager::~gameManager(){
 }
 
+void gameManager::Update(float dt) {
+	if (!gameOver)
+		return;
+
+	delay += 1 * dt;
+	if (delay >= 5)
+		restart = true;
+}
+
+void gameManager::Draw() {
+	if (!gameOver)
+		return;
+
+	DrawText("GAME OVER", 250, 260, 100, BLACK);
+}
+
 void gameManager::ApplyDamage(int amount) {
 	castleLife -= amount;
 	if (castleLife <= 0) {
@@ -31,9 +47,18 @@ void gameManager::SubtractMoney(int amount) {
 }
 
 void gameManager::CastleDead() {
-	std::cout << "Castle Destroyed" << std::endl;
+	gameOver = true;
 }
 
 int gameManager::GetMoney() {
 	return money;
+}
+
+bool gameManager::GetRestart() {
+	return restart;
+}
+
+int gameManager::GetLife()
+{
+	return castleLife;
 }

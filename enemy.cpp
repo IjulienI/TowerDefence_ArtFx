@@ -3,8 +3,6 @@
 Enemy::~Enemy() {
 	position = { -1000,-1000 };
 	gm->AddMoney(drop);
-	UnloadTexture(texture);
-	std::cout << "Enemy Destroy" << std::endl;
 }
 
 void Enemy::Update(float dt) {
@@ -99,12 +97,24 @@ void Enemy::ApplyDamage(const int amount) {
 	std::cout << health << std::endl;
 }
 
+void Enemy::SetLifeMultiplier(const int time) {
+	this->health += (health / 0.25) * time;
+}
+
 bool Enemy::GetDeath() {
 	return dead;
 }
 
 void Enemy::SetDeath(const bool status) {
 	dead = status;
+}
+
+int Enemy::GetDrop() {
+	return drop;
+}
+
+void Enemy::SetDropMultiplier(const int time) {
+	this->drop *= time;
 }
 
 
@@ -116,7 +126,7 @@ SmallEnemy::SmallEnemy(gameManager* gameManager) {
 
 	health = 15;
 	damage = 50;
-	drop = 15;
+	drop = 100;
 
 	attackDelay = 1;
 	delay = attackDelay - 0.2;
@@ -132,7 +142,7 @@ MidEnemy::MidEnemy(gameManager* gameManager) {
 
 	health = 25;
 	damage = 100;
-	drop = 50;
+	drop = 200;
 
 	attackDelay = 1.5;
 	delay = attackDelay - 0.2;
@@ -148,7 +158,7 @@ BigEnemy::BigEnemy(gameManager* gameManager) {
 
 	health = 45;
 	damage = 150;
-	drop = 100;
+	drop = 350;
 
 	attackDelay = 2;
 	delay = attackDelay - 0.2;
@@ -162,9 +172,9 @@ Boss::Boss(gameManager* gameManager) {
 	speed = 35;
 	rotationSpeed = speed * 6;
 
-	health = 25000;
+	health = 500;
 	damage = 350;
-	drop = 250;
+	drop = 2000;
 
 	attackDelay = 3;
 	delay = attackDelay - 0.2;

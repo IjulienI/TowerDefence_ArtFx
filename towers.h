@@ -24,7 +24,7 @@ private:
 
 	int range = 150;
 	int moneyToUpgrade = 200;
-	int moneyToSell = 100;
+	int moneyToSell = 25;
 
 	float rotation = 0;
 
